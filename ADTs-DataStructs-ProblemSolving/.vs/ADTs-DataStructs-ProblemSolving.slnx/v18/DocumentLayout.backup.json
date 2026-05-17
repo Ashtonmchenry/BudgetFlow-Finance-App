@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|solutionrelative:ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Downloads\\testdriver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|solutionrelative:ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SimpleDataTypes.cpp",
+              "DocumentMoniker": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
+              "RelativeDocumentMoniker": "ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
+              "ToolTip": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
+              "RelativeToolTip": "ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-17T02:58:39.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "testdriver.cpp",
+              "DocumentMoniker": "C:\\Users\\KINGS\\Downloads\\testdriver.cpp",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Downloads\\testdriver.cpp",
+              "ToolTip": "C:\\Users\\KINGS\\Downloads\\testdriver.cpp",
+              "RelativeToolTip": "..\\..\\..\\..\\Downloads\\testdriver.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-15T19:31:47.791Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ADTs-DataStructs-ProblemSolving.cpp",
+              "DocumentMoniker": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp",
+              "RelativeDocumentMoniker": "ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp",
+              "ToolTip": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp",
+              "RelativeToolTip": "ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-15T16:15:13.173Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
