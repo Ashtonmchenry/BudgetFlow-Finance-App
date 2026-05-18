@@ -27,7 +27,10 @@
     <ClCompile Include="Algorithms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Downloads\testdriver.cpp">
+    <ClCompile Include="SimpleDataTypes.cpp">
+      <Filter>Source Files\2.2</Filter>
+    </ClCompile>
+    <ClCompile Include="testdriver.cpp">
       <Filter>Source Files\1.9 FinAidUpdater</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Downloads\StudentAidRecord.cpp">
@@ -36,15 +39,12 @@
     <ClCompile Include="..\..\..\..\..\Downloads\FinancialAidAward.cpp">
       <Filter>Source Files\1.9 FinAidUpdater</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleDataTypes.cpp">
-      <Filter>Source Files\2.2</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\FinancialAidAward.h">
+    <ClInclude Include="..\..\..\..\..\Downloads\StudentAidRecord.h">
       <Filter>Header Files\1.9 FinAidUpdater</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Downloads\StudentAidRecord.h">
+    <ClInclude Include="..\..\..\..\..\Downloads\FinancialAidAward.h">
       <Filter>Header Files\1.9 FinAidUpdater</Filter>
     </ClInclude>
   </ItemGroup>

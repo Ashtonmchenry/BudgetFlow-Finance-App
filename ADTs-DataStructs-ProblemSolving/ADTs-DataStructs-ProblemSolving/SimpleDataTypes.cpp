@@ -13,7 +13,14 @@ int main() {
 	float myFloat = 3.14f; // Example of a float
 	double myDouble = 3.14159; // Example of a double
 	char myChar = 'A'; // Example of a character
+
+
 	bool myBool = true; // Example of a boolean
+	bool myBoolFalse = false;
+	bool myBoolInt = 1;
+	bool myBoolIntFalse = 0;
+
+
 	cout << "Integer: " << myInt << endl;
 	cout << "Float: " << myFloat << endl;
 	cout << "Double: " << myDouble << endl;
@@ -24,6 +31,11 @@ int main() {
 	cout << "Min size of integer variables: " << sizeof(INT_MIN) << " bytes" << endl;
 	cout << "INT_MAX = " << INT_MAX << endl;
 	cout << "Max size of integer variables: " << sizeof(INT_MAX) << " bytes" << endl;
+
+	cout << myBool << endl;
+	cout << myBoolFalse << endl;
+	cout << myBoolInt << endl;
+	cout << myBoolIntFalse << endl;
 
 	return 0;
 }
