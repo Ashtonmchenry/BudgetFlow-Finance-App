@@ -22,6 +22,9 @@
     <Filter Include="Source Files\2.2">
       <UniqueIdentifier>{7e5e4ac3-61ce-404a-8fbe-8933350f92a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\2.5">
+      <UniqueIdentifier>{88598fe2-7d75-406a-94fc-f373e6c20d39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms.cpp">
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Downloads\FinancialAidAward.cpp">
       <Filter>Source Files\1.9 FinAidUpdater</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Downloads\Fig2-5.cpp">
+      <Filter>Source Files\2.5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

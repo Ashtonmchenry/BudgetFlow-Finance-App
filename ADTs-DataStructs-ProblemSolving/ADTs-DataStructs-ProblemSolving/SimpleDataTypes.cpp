@@ -3,6 +3,8 @@
 using namespace std;
 
 int main() {
+	//2.2 Simple Data Types in C++
+	
 	// Simple data types in C++ include:
 	// 1. int: Represents integer values (e.g., 1, -5, 42).
 	// 2. float: Represents single-precision floating-point numbers (e.g., 3.14, -0.001).
@@ -13,29 +15,24 @@ int main() {
 	float myFloat = 3.14f; // Example of a float
 	double myDouble = 3.14159; // Example of a double
 	char myChar = 'A'; // Example of a character
-
-
 	bool myBool = true; // Example of a boolean
-	bool myBoolFalse = false;
-	bool myBoolInt = 1;
-	bool myBoolIntFalse = 0;
-
 
 	cout << "Integer: " << myInt << endl;
 	cout << "Float: " << myFloat << endl;
 	cout << "Double: " << myDouble << endl;
 	cout << "Character: " << myChar << endl;
-	cout << "Boolean: " << boolalpha << myBool << endl;
+	cout << "Boolean: " << boolalpha << myBool << endl << endl; // Using boolalpha to print boolean values as true/false instead of 1/0
 
 	cout << "INT_MIN = " << INT_MIN << endl;
 	cout << "Min size of integer variables: " << sizeof(INT_MIN) << " bytes" << endl;
 	cout << "INT_MAX = " << INT_MAX << endl;
-	cout << "Max size of integer variables: " << sizeof(INT_MAX) << " bytes" << endl;
+	cout << "Max size of integer variables: " << sizeof(INT_MAX) << " bytes" << endl << endl;
 
-	cout << myBool << endl;
-	cout << myBoolFalse << endl;
-	cout << myBoolInt << endl;
-	cout << myBoolIntFalse << endl;
+	//2.3 Pointers
+
+	int* intPointer = &myInt; // Pointer to an integer variable
+	cout << "Pointer to myInt: " << intPointer << endl; // Prints the memory address of myInt
+	cout << "Value at the pointer: " << *intPointer << endl; // Dereferencing the pointer to get the value of myInt
 
 	return 0;
 }

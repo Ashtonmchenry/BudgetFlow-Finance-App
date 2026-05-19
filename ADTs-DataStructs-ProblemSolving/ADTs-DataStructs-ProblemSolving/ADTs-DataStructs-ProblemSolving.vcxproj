@@ -139,10 +139,13 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Downloads\Fig2-5.cpp" />
     <ClCompile Include="..\..\..\..\..\Downloads\FinancialAidAward.cpp" />
     <ClCompile Include="..\..\..\..\..\Downloads\StudentAidRecord.cpp" />
     <ClCompile Include="Algorithms.cpp" />
-    <ClCompile Include="SimpleDataTypes.cpp" />
+    <ClCompile Include="SimpleDataTypes.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="testdriver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
