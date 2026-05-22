@@ -1,13 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\KINGS\\Documents\\REPOSITORIES\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\",
+  "WorkspaceRootPath": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Downloads\\Fig2-5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Documents\\REPOSITORIES\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|solutionrelative:ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{4B66BF30-5B7D-42E5-936F-D583FD8BD305}|ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving.vcxproj|C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\examples\\Fig3-8.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,27 +18,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Fig2-5.cpp",
-              "DocumentMoniker": "C:\\Users\\KINGS\\Downloads\\Fig2-5.cpp",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\Downloads\\Fig2-5.cpp",
-              "ToolTip": "C:\\Users\\KINGS\\Downloads\\Fig2-5.cpp",
-              "RelativeToolTip": "..\\..\\..\\..\\Downloads\\Fig2-5.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAALAAAAAAAAAA==",
+              "Title": "Fig3-8.cpp",
+              "DocumentMoniker": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\examples\\Fig3-8.cpp",
+              "RelativeDocumentMoniker": "..\\examples\\Fig3-8.cpp",
+              "ToolTip": "C:\\Users\\KINGS\\Documents\\GitHub\\ADTs-Data-Structures-and-Problem-solving\\examples\\Fig3-8.cpp",
+              "RelativeToolTip": "..\\examples\\Fig3-8.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-18T22:23:44.547Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SimpleDataTypes.cpp",
-              "DocumentMoniker": "C:\\Users\\KINGS\\Documents\\REPOSITORIES\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
-              "RelativeDocumentMoniker": "ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
-              "ToolTip": "C:\\Users\\KINGS\\Documents\\REPOSITORIES\\ADTs-Data-Structures-and-Problem-solving\\ADTs-DataStructs-ProblemSolving\\ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
-              "RelativeToolTip": "ADTs-DataStructs-ProblemSolving\\SimpleDataTypes.cpp",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-05-18T21:47:13.717Z",
+              "WhenOpened": "2026-05-20T17:43:41.73Z",
               "EditorCaption": ""
             }
           ]

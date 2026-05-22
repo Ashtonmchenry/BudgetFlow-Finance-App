@@ -139,20 +139,29 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\Fig2-5.cpp" />
-    <ClCompile Include="..\..\..\..\..\Downloads\FinancialAidAward.cpp" />
-    <ClCompile Include="..\..\..\..\..\Downloads\StudentAidRecord.cpp" />
+    <ClCompile Include="..\..\examples\Fig2-5.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Fig3-5.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Fig3-8.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\argc-argv-demo.cpp" />
+    <ClCompile Include="..\..\examples\FinancialAidAward.cpp" />
+    <ClCompile Include="..\..\examples\StudentAidRecord.cpp" />
+    <ClCompile Include="..\..\examples\testdriver.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Algorithms.cpp" />
     <ClCompile Include="SimpleDataTypes.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="testdriver.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\FinancialAidAward.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\StudentAidRecord.h" />
+    <ClInclude Include="..\..\examples\FinancialAidAward.h" />
+    <ClInclude Include="..\..\examples\StudentAidRecord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
