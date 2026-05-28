@@ -1,3 +1,5 @@
+from urllib import response
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import date
@@ -174,28 +176,121 @@ def delete_transaction(transaction_id: int):
     )
 
 @app.get("/reports/summary")
-def get_summary():
-    total_spending = sum(transaction.amount for transaction in transactions)
-    transaction_count = len(transactions)
+def get_summary(
+    category: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None
+):
+    results = transactions
+
+    if category is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.category.lower() == category.lower()
+        ]
+
+    if start_date is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.transaction_date >= start_date
+        ]
+
+    if end_date is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.transaction_date <= end_date
+        ]
+
+    total_spending = sum(transaction.amount for transaction in results)
+    transaction_count = len(results)
 
     if transaction_count > 0:
-        average_transaction = total_spending / transaction_count
+        average_spending = round(total_spending / transaction_count, 2)
     else:
-        average_transaction = 0
+        average_spending = 0
 
     spending_by_category = {}
 
-    for transaction in transactions:
-        category = transaction.category
+    for transaction in results:
+        category_name = transaction.category
 
-        if category not in spending_by_category:
-            spending_by_category[category] = 0
+        if category_name not in spending_by_category:
+            spending_by_category[category_name] = 0
 
-        spending_by_category[category] += transaction.amount
+        spending_by_category[category_name] += transaction.amount
 
-    return {
+    response = {
+        "category": category,
+        "start_date": start_date,
+        "end_date": end_date,
         "total_spending": total_spending,
         "transaction_count": transaction_count,
-        "average_transaction": average_transaction,
-        "spending_by_category": spending_by_category
+        "average_spending": average_spending,
     }
+
+    if category is None:
+        response["spending_by_category"] = spending_by_category
+
+    return response
+
+
+@app.get("/reports/monthly")
+def get_monthly_report(
+    category: str | None = None
+):
+    results = transactions
+
+    if category is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.category.lower() == category.lower()
+        ]
+
+    monthly_spending = {}
+
+    for transaction in results:
+        month_key = transaction.transaction_date.strftime("%Y-%m")
+
+        if month_key not in monthly_spending:
+            monthly_spending[month_key] = 0
+
+        monthly_spending[month_key] += transaction.amount
+
+    for month in monthly_spending:
+        monthly_spending[month] = round(monthly_spending[month], 2)
+
+    return {
+        "category": category,
+        "monthly_spending": monthly_spending
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

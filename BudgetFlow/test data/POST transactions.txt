@@ -1,0 +1,69 @@
+{
+  "name": "Rent Payment",
+  "amount": 1200.00,
+  "category": "Housing",
+  "transaction_date": "2026-01-01"
+}
+
+{
+  "name": "Electric Bill",
+  "amount": 94.35,
+  "category": "Utilities",
+  "transaction_date": "2026-01-08"
+}
+
+{
+  "name": "Chipotle",
+  "amount": 14.25,
+  "category": "Food",
+  "transaction_date": "2026-01-12"
+}
+
+{
+  "name": "Publix Groceries",
+  "amount": 82.47,
+  "category": "Groceries",
+  "transaction_date": "2026-01-14"
+}
+
+{
+  "name": "McDonald's",
+  "amount": 9.75,
+  "category": "Food",
+  "transaction_date": "2026-01-18"
+}
+
+{
+  "name": "Shell Gas",
+  "amount": 42.10,
+  "category": "Transportation",
+  "transaction_date": "2026-01-20"
+}
+
+{
+  "name": "Uber Ride",
+  "amount": 18.60,
+  "category": "Transportation",
+  "transaction_date": "2026-01-22"
+}
+
+{
+  "name": "Netflix",
+  "amount": 15.49,
+  "category": "Subscriptions",
+  "transaction_date": "2026-01-25"
+}
+
+{
+  "name": "Gym Membership",
+  "amount": 35.00,
+  "category": "Health",
+  "transaction_date": "2026-01-26"
+}
+
+{
+  "name": "Amazon Purchase",
+  "amount": 67.89,
+  "category": "Shopping",
+  "transaction_date": "2026-01-28"
+}
