@@ -81,7 +81,7 @@ def get_transactions(
 
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
 def get_transaction(transaction_id: int):
-    # Retrieve a transaction by its unique id using a path parameter
+    """ Retrieve a transaction by its unique id using a path parameter"""
 
     # Divide and conquer search
     low = 0
@@ -104,6 +104,7 @@ def get_transaction(transaction_id: int):
 
 @app.post("/transactions", response_model=Transaction)
 def create_transaction(transaction: TransactionCreate):
+    """Create a new transaction"""
     global next_transaction_id
 
     new_transaction = Transaction(
@@ -127,7 +128,7 @@ def create_transaction(transaction: TransactionCreate):
 
 @app.put("/transactions/{transaction_id}", response_model=Transaction)
 def update_transaction(transaction_id: int, updated_transaction: TransactionCreate):
-    
+    """Update existing transaction"""
     # Divide and conquer search
     low = 0
     high = len(transactions) - 1
@@ -157,7 +158,8 @@ def update_transaction(transaction_id: int, updated_transaction: TransactionCrea
 
 @app.delete("/transactions/{transaction_id}")
 def delete_transaction(transaction_id: int):
-    # delete a transaction by its unique id
+
+    """Delete a transaction by its unique id"""
     for transaction in transactions:
         if transaction.id == transaction_id:
             transactions.remove(transaction)
@@ -170,3 +172,30 @@ def delete_transaction(transaction_id: int):
         status_code=404,
         detail="Transaction not found"
     )
+
+@app.get("/reports/summary")
+def get_summary():
+    total_spending = sum(transaction.amount for transaction in transactions)
+    transaction_count = len(transactions)
+
+    if transaction_count > 0:
+        average_transaction = total_spending / transaction_count
+    else:
+        average_transaction = 0
+
+    spending_by_category = {}
+
+    for transaction in transactions:
+        category = transaction.category
+
+        if category not in spending_by_category:
+            spending_by_category[category] = 0
+
+        spending_by_category[category] += transaction.amount
+
+    return {
+        "total_spending": total_spending,
+        "transaction_count": transaction_count,
+        "average_transaction": average_transaction,
+        "spending_by_category": spending_by_category
+    }
