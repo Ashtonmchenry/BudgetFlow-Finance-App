@@ -34,12 +34,56 @@ def health_check():
     return {"status": "ok"}
 
 @app.get("/transactions", response_model=list[Transaction])
-def get_transactions():
-    return transactions
+def get_transactions(
+    category: str | None = None,        # Query Parameters for filtering transactions
+    min_amount: float | None = None,    
+    max_amount: float | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None
+):
+    results = transactions
+
+    if category is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.category.lower() == category.lower()
+        ]
+
+    if min_amount is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.amount >= min_amount
+        ]
+
+    if max_amount is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.amount <= max_amount
+        ]
+
+    if start_date is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.transaction_date >= start_date
+        ]
+
+    if end_date is not None:
+        results = [
+            transaction
+            for transaction in results
+            if transaction.transaction_date <= end_date
+        ]
+    return results
 
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
 def get_transaction(transaction_id: int):
-    # retrieve a transaction by its unique id using a divide and conquer approach
+    # Retrieve a transaction by its unique id using a path parameter
+
+    # Divide and conquer search
     low = 0
     high = len(transactions) - 1
 
@@ -52,6 +96,7 @@ def get_transaction(transaction_id: int):
         else:
             high = mid - 1
 
+    # Transaction not found, raise a 404 error
     raise HTTPException(
         status_code=404,
         detail="Transaction not found"
@@ -59,7 +104,7 @@ def get_transaction(transaction_id: int):
 
 @app.post("/transactions", response_model=Transaction)
 def create_transaction(transaction: TransactionCreate):
-    global next_transaction_id # we need to declare this as global since we will be modifying it inside the function
+    global next_transaction_id
 
     new_transaction = Transaction(
         id=next_transaction_id,
@@ -71,11 +116,44 @@ def create_transaction(transaction: TransactionCreate):
 
     transactions.append(new_transaction)
 
-    # transactions.sort(key=lambda x: x.id) # ensure transactions are always sorted by id after adding a new transaction
+    # Sorting the transactions list is not needed for testing. Will use later when we switch to a database
+    
+    # Ensure transactions are always sorted by id after adding a new transaction
+    # transactions.sort(key=lambda x: x.id)
 
     next_transaction_id += 1
 
     return new_transaction
+
+@app.put("/transactions/{transaction_id}", response_model=Transaction)
+def update_transaction(transaction_id: int, updated_transaction: TransactionCreate):
+    
+    # Divide and conquer search
+    low = 0
+    high = len(transactions) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        if transactions[mid].id == transaction_id:
+            transactions[mid] = Transaction(
+                id=transaction_id,
+                name=updated_transaction.name,
+                amount=updated_transaction.amount,
+                category=updated_transaction.category,
+                transaction_date=updated_transaction.transaction_date
+            )
+
+            return transactions[mid]
+
+        if transactions[mid].id < transaction_id:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    raise HTTPException(
+        status_code=404,
+        detail="Transaction not found"
+    )
 
 @app.delete("/transactions/{transaction_id}")
 def delete_transaction(transaction_id: int):
