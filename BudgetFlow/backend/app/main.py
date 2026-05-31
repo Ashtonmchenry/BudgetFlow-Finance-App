@@ -10,6 +10,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
+
 class TransactionCreate(BaseModel):
     # defines the structure of a new transaction being created
     name: str
@@ -17,31 +18,35 @@ class TransactionCreate(BaseModel):
     category: str
     transaction_date: date
 
+
 class Transaction(TransactionCreate):
     # adds a unique id identifier to a new transaction
     id: int
 
-transactions: list[Transaction] = [] # transactions will be a list stored in memory for now, but this can be replaced with a database in the future
-next_transaction_id = 1 # counter for the next unique id to assign to a new transaction
+
+transactions: list[
+    Transaction
+] = []  # transactions will be a list stored in memory for now, but this can be replaced with a database in the future
+next_transaction_id = 1  # counter for the next unique id to assign to a new transaction
+
 
 @app.get("/")
 def root():
-    return {
-        "message": "BudgetFlow API is running",
-        "docs": "/docs"
-    }
+    return {"message": "BudgetFlow API is running", "docs": "/docs"}
+
 
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
 
+
 @app.get("/transactions", response_model=list[Transaction])
 def get_transactions(
-    category: str | None = None,        # Query Parameters for filtering transactions
-    min_amount: float | None = None,    
+    category: str | None = None,  # Query Parameters for filtering transactions
+    min_amount: float | None = None,
     max_amount: float | None = None,
     start_date: date | None = None,
-    end_date: date | None = None
+    end_date: date | None = None,
 ):
     results = transactions
 
@@ -54,16 +59,12 @@ def get_transactions(
 
     if min_amount is not None:
         results = [
-            transaction
-            for transaction in results
-            if transaction.amount >= min_amount
+            transaction for transaction in results if transaction.amount >= min_amount
         ]
 
     if max_amount is not None:
         results = [
-            transaction
-            for transaction in results
-            if transaction.amount <= max_amount
+            transaction for transaction in results if transaction.amount <= max_amount
         ]
 
     if start_date is not None:
@@ -81,9 +82,10 @@ def get_transactions(
         ]
     return results
 
+
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
 def get_transaction(transaction_id: int):
-    """ Retrieve a transaction by its unique id using a path parameter"""
+    """Retrieve a transaction by its unique id using a path parameter"""
 
     # Divide and conquer search
     low = 0
@@ -99,10 +101,8 @@ def get_transaction(transaction_id: int):
             high = mid - 1
 
     # Transaction not found, raise a 404 error
-    raise HTTPException(
-        status_code=404,
-        detail="Transaction not found"
-    )
+    raise HTTPException(status_code=404, detail="Transaction not found")
+
 
 @app.post("/transactions", response_model=Transaction)
 def create_transaction(transaction: TransactionCreate):
@@ -114,19 +114,20 @@ def create_transaction(transaction: TransactionCreate):
         name=transaction.name,
         amount=transaction.amount,
         category=transaction.category,
-        transaction_date=transaction.transaction_date
+        transaction_date=transaction.transaction_date,
     )
 
     transactions.append(new_transaction)
 
     # Sorting the transactions list is not needed for testing. Will use later when we switch to a database
-    
+
     # Ensure transactions are always sorted by id after adding a new transaction
     # transactions.sort(key=lambda x: x.id)
 
     next_transaction_id += 1
 
     return new_transaction
+
 
 @app.put("/transactions/{transaction_id}", response_model=Transaction)
 def update_transaction(transaction_id: int, updated_transaction: TransactionCreate):
@@ -143,7 +144,7 @@ def update_transaction(transaction_id: int, updated_transaction: TransactionCrea
                 name=updated_transaction.name,
                 amount=updated_transaction.amount,
                 category=updated_transaction.category,
-                transaction_date=updated_transaction.transaction_date
+                transaction_date=updated_transaction.transaction_date,
             )
 
             return transactions[mid]
@@ -153,33 +154,28 @@ def update_transaction(transaction_id: int, updated_transaction: TransactionCrea
         else:
             high = mid - 1
 
-    raise HTTPException(
-        status_code=404,
-        detail="Transaction not found"
-    )
+    raise HTTPException(status_code=404, detail="Transaction not found")
+
 
 @app.delete("/transactions/{transaction_id}")
 def delete_transaction(transaction_id: int):
-
     """Delete a transaction by its unique id"""
     for transaction in transactions:
         if transaction.id == transaction_id:
             transactions.remove(transaction)
             return {
                 "message": "Transaction deleted",
-                "deleted_transaction_id": transaction_id
+                "deleted_transaction_id": transaction_id,
             }
 
-    raise HTTPException(
-        status_code=404,
-        detail="Transaction not found"
-    )
+    raise HTTPException(status_code=404, detail="Transaction not found")
+
 
 @app.get("/reports/summary")
 def get_summary(
     category: str | None = None,
     start_date: date | None = None,
-    end_date: date | None = None
+    end_date: date | None = None,
 ):
     results = transactions
 
@@ -222,7 +218,7 @@ def get_summary(
 
         spending_by_category[category_name] += transaction.amount
 
-    response = {
+    summary_response = {
         "category": category,
         "start_date": start_date,
         "end_date": end_date,
@@ -232,15 +228,13 @@ def get_summary(
     }
 
     if category is None:
-        response["spending_by_category"] = spending_by_category
+        summary_response["spending_by_category"] = spending_by_category
 
-    return response
+    return summary_response
 
 
 @app.get("/reports/monthly")
-def get_monthly_report(
-    category: str | None = None
-):
+def get_monthly_report(category: str | None = None):
     results = transactions
 
     if category is not None:
@@ -260,34 +254,7 @@ def get_monthly_report(
 
         monthly_spending[month_key] += transaction.amount
 
-    return {
-        "category": category,
-        "monthly_spending": monthly_spending
-    }
+        for month in monthly_spending:
+            monthly_spending[month] = round(monthly_spending[month], 2)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return {"category": category, "monthly_spending": monthly_spending}
