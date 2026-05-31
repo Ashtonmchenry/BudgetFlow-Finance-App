@@ -260,9 +260,6 @@ def get_monthly_report(
 
         monthly_spending[month_key] += transaction.amount
 
-    for month in monthly_spending:
-        monthly_spending[month] = round(monthly_spending[month], 2)
-
     return {
         "category": category,
         "monthly_spending": monthly_spending

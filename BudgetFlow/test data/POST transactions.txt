@@ -67,3 +67,45 @@
   "category": "Shopping",
   "transaction_date": "2026-01-28"
 }
+
+{
+  "name": "February Rent",
+  "amount": 1200.00,
+  "category": "Housing",
+  "transaction_date": "2026-02-01"
+}
+
+{
+  "name": "February Groceries",
+  "amount": 91.32,
+  "category": "Groceries",
+  "transaction_date": "2026-02-10"
+}
+
+{
+  "name": "February Chipotle",
+  "amount": 15.80,
+  "category": "Food",
+  "transaction_date": "2026-02-14"
+}
+
+{
+  "name": "March Rent",
+  "amount": 1200.00,
+  "category": "Housing",
+  "transaction_date": "2026-03-01"
+}
+
+{
+  "name": "March Gas",
+  "amount": 48.25,
+  "category": "Transportation",
+  "transaction_date": "2026-03-07"
+}
+
+{
+  "name": "March Publix",
+  "amount": 74.66,
+  "category": "Groceries",
+  "transaction_date": "2026-03-15"
+}
