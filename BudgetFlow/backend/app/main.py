@@ -1,14 +1,19 @@
-from urllib import response
-
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 from datetime import date
+
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+from app.database import Base, engine, get_db
+from app.models import TransactionDB
+from app.schemas import Transaction, TransactionCreate
 
 app = FastAPI(
     title="BudgetFlow API",
     description="Backend API for the BudgetFlow personal finance dashboard.",
     version="0.1.0",
 )
+
+Base.metadata.create_all(bind=engine)
 
 
 class TransactionCreate(BaseModel):
@@ -24,12 +29,6 @@ class Transaction(TransactionCreate):
     id: int
 
 
-transactions: list[
-    Transaction
-] = []  # transactions will be a list stored in memory for now, but this can be replaced with a database in the future
-next_transaction_id = 1  # counter for the next unique id to assign to a new transaction
-
-
 @app.get("/")
 def root():
     return {"message": "BudgetFlow API is running", "docs": "/docs"}
@@ -42,45 +41,31 @@ def health_check():
 
 @app.get("/transactions", response_model=list[Transaction])
 def get_transactions(
-    category: str | None = None,  # Query Parameters for filtering transactions
+    category: str | None = None,
     min_amount: float | None = None,
     max_amount: float | None = None,
     start_date: date | None = None,
     end_date: date | None = None,
+    db: Session = Depends(get_db),
 ):
-    results = transactions
+    query = db.query(TransactionDB)
 
     if category is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.category.lower() == category.lower()
-        ]
+        query = query.filter(TransactionDB.category.ilike(category))
 
     if min_amount is not None:
-        results = [
-            transaction for transaction in results if transaction.amount >= min_amount
-        ]
+        query = query.filter(TransactionDB.amount >= min_amount)
 
     if max_amount is not None:
-        results = [
-            transaction for transaction in results if transaction.amount <= max_amount
-        ]
+        query = query.filter(TransactionDB.amount <= max_amount)
 
     if start_date is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.transaction_date >= start_date
-        ]
+        query = query.filter(TransactionDB.transaction_date >= start_date)
 
     if end_date is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.transaction_date <= end_date
-        ]
-    return results
+        query = query.filter(TransactionDB.transaction_date <= end_date)
+
+    return query.order_by(TransactionDB.id).all()
 
 
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
@@ -105,28 +90,30 @@ def get_transaction(transaction_id: int):
 
 
 @app.post("/transactions", response_model=Transaction)
-def create_transaction(transaction: TransactionCreate):
+def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db)):
     """Create a new transaction"""
-    global next_transaction_id
 
-    new_transaction = Transaction(
-        id=next_transaction_id,
+    new_transaction = TransactionDB(
         name=transaction.name,
         amount=transaction.amount,
         category=transaction.category,
         transaction_date=transaction.transaction_date,
     )
 
-    transactions.append(new_transaction)
+    db.add(new_transaction)
+    db.commit()
+    db.refresh(new_transaction)
+
+    return new_transaction
 
     # Sorting the transactions list is not needed for testing. Will use later when we switch to a database
 
     # Ensure transactions are always sorted by id after adding a new transaction
     # transactions.sort(key=lambda x: x.id)
 
-    next_transaction_id += 1
+    # next_transaction_id += 1
 
-    return new_transaction
+    # return new_transaction
 
 
 @app.put("/transactions/{transaction_id}", response_model=Transaction)
