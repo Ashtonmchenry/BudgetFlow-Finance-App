@@ -7,6 +7,7 @@ from app.database import Base, engine, get_db
 from app.models import TransactionDB
 from app.schemas import Transaction, TransactionCreate
 
+
 app = FastAPI(
     title="BudgetFlow API",
     description="Backend API for the BudgetFlow personal finance dashboard.",
@@ -16,27 +17,38 @@ app = FastAPI(
 Base.metadata.create_all(bind=engine)
 
 
-class TransactionCreate(BaseModel):
-    # defines the structure of a new transaction being created
-    name: str
-    amount: float
-    category: str
-    transaction_date: date
-
-
-class Transaction(TransactionCreate):
-    # adds a unique id identifier to a new transaction
-    id: int
-
-
 @app.get("/")
 def root():
-    return {"message": "BudgetFlow API is running", "docs": "/docs"}
+    return {
+        "message": "BudgetFlow API is running",
+        "docs": "/docs"
+    }
 
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok"}
+    return {
+        "status": "ok"
+    }
+
+
+@app.post("/transactions", response_model=Transaction)
+def create_transaction(
+    transaction: TransactionCreate,
+    db: Session = Depends(get_db)
+):
+    new_transaction = TransactionDB(
+        name=transaction.name,
+        amount=transaction.amount,
+        category=transaction.category,
+        transaction_date=transaction.transaction_date
+    )
+
+    db.add(new_transaction)
+    db.commit()
+    db.refresh(new_transaction)
+
+    return new_transaction
 
 
 @app.get("/transactions", response_model=list[Transaction])
@@ -46,7 +58,7 @@ def get_transactions(
     max_amount: float | None = None,
     start_date: date | None = None,
     end_date: date | None = None,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
     query = db.query(TransactionDB)
 
@@ -69,93 +81,78 @@ def get_transactions(
 
 
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
-def get_transaction(transaction_id: int):
-    """Retrieve a transaction by its unique id using a path parameter"""
-
-    # Divide and conquer search
-    low = 0
-    high = len(transactions) - 1
-
-    while low <= high:
-        mid = (low + high) // 2
-        if transactions[mid].id == transaction_id:
-            return transactions[mid]
-        elif transactions[mid].id < transaction_id:
-            low = mid + 1
-        else:
-            high = mid - 1
-
-    # Transaction not found, raise a 404 error
-    raise HTTPException(status_code=404, detail="Transaction not found")
-
-
-@app.post("/transactions", response_model=Transaction)
-def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db)):
-    """Create a new transaction"""
-
-    new_transaction = TransactionDB(
-        name=transaction.name,
-        amount=transaction.amount,
-        category=transaction.category,
-        transaction_date=transaction.transaction_date,
+def get_transaction(
+    transaction_id: int,
+    db: Session = Depends(get_db)
+):
+    transaction = (
+        db.query(TransactionDB)
+        .filter(TransactionDB.id == transaction_id)
+        .first()
     )
 
-    db.add(new_transaction)
-    db.commit()
-    db.refresh(new_transaction)
+    if transaction is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
 
-    return new_transaction
-
-    # Sorting the transactions list is not needed for testing. Will use later when we switch to a database
-
-    # Ensure transactions are always sorted by id after adding a new transaction
-    # transactions.sort(key=lambda x: x.id)
-
-    # next_transaction_id += 1
-
-    # return new_transaction
+    return transaction
 
 
 @app.put("/transactions/{transaction_id}", response_model=Transaction)
-def update_transaction(transaction_id: int, updated_transaction: TransactionCreate):
-    """Update existing transaction"""
-    # Divide and conquer search
-    low = 0
-    high = len(transactions) - 1
+def update_transaction(
+    transaction_id: int,
+    updated_transaction: TransactionCreate,
+    db: Session = Depends(get_db)
+):
+    transaction = (
+        db.query(TransactionDB)
+        .filter(TransactionDB.id == transaction_id)
+        .first()
+    )
 
-    while low <= high:
-        mid = (low + high) // 2
-        if transactions[mid].id == transaction_id:
-            transactions[mid] = Transaction(
-                id=transaction_id,
-                name=updated_transaction.name,
-                amount=updated_transaction.amount,
-                category=updated_transaction.category,
-                transaction_date=updated_transaction.transaction_date,
-            )
+    if transaction is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
 
-            return transactions[mid]
+    transaction.name = updated_transaction.name
+    transaction.amount = updated_transaction.amount
+    transaction.category = updated_transaction.category
+    transaction.transaction_date = updated_transaction.transaction_date
 
-        if transactions[mid].id < transaction_id:
-            low = mid + 1
-        else:
-            high = mid - 1
+    db.commit()
+    db.refresh(transaction)
 
-    raise HTTPException(status_code=404, detail="Transaction not found")
+    return transaction
 
 
 @app.delete("/transactions/{transaction_id}")
-def delete_transaction(transaction_id: int):
-    """Delete a transaction by its unique id"""
-    for transaction in transactions:
-        if transaction.id == transaction_id:
-            transactions.remove(transaction)
-            return {
-                "message": "Transaction deleted",
-                "deleted_transaction_id": transaction_id,
-            }
+def delete_transaction(
+    transaction_id: int,
+    db: Session = Depends(get_db)
+):
+    transaction = (
+        db.query(TransactionDB)
+        .filter(TransactionDB.id == transaction_id)
+        .first()
+    )
 
-    raise HTTPException(status_code=404, detail="Transaction not found")
+    if transaction is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
+
+    db.delete(transaction)
+    db.commit()
+
+    return {
+        "message": "Transaction deleted",
+        "deleted_transaction_id": transaction_id
+    }
 
 
 @app.get("/reports/summary")
@@ -163,29 +160,20 @@ def get_summary(
     category: str | None = None,
     start_date: date | None = None,
     end_date: date | None = None,
+    db: Session = Depends(get_db)
 ):
-    results = transactions
+    query = db.query(TransactionDB)
 
     if category is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.category.lower() == category.lower()
-        ]
+        query = query.filter(TransactionDB.category.ilike(category))
 
     if start_date is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.transaction_date >= start_date
-        ]
+        query = query.filter(TransactionDB.transaction_date >= start_date)
 
     if end_date is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.transaction_date <= end_date
-        ]
+        query = query.filter(TransactionDB.transaction_date <= end_date)
+
+    results = query.all()
 
     total_spending = sum(transaction.amount for transaction in results)
     transaction_count = len(results)
@@ -205,7 +193,7 @@ def get_summary(
 
         spending_by_category[category_name] += transaction.amount
 
-    summary_response = {
+    response = {
         "category": category,
         "start_date": start_date,
         "end_date": end_date,
@@ -215,21 +203,22 @@ def get_summary(
     }
 
     if category is None:
-        summary_response["spending_by_category"] = spending_by_category
+        response["spending_by_category"] = spending_by_category
 
-    return summary_response
+    return response
 
 
 @app.get("/reports/monthly")
-def get_monthly_report(category: str | None = None):
-    results = transactions
+def get_monthly_report(
+    category: str | None = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(TransactionDB)
 
     if category is not None:
-        results = [
-            transaction
-            for transaction in results
-            if transaction.category.lower() == category.lower()
-        ]
+        query = query.filter(TransactionDB.category.ilike(category))
+
+    results = query.all()
 
     monthly_spending = {}
 
@@ -241,7 +230,10 @@ def get_monthly_report(category: str | None = None):
 
         monthly_spending[month_key] += transaction.amount
 
-        for month in monthly_spending:
-            monthly_spending[month] = round(monthly_spending[month], 2)
+    for month in monthly_spending:
+        monthly_spending[month] = round(monthly_spending[month], 2)
 
-    return {"category": category, "monthly_spending": monthly_spending}
+    return {
+        "category": category,
+        "monthly_spending": monthly_spending
+    }
