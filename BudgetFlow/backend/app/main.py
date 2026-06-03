@@ -1,8 +1,12 @@
+# API endpoints
+
 from datetime import date
+from app import crud
 
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
+from app import crud
 from app.database import Base, engine, get_db
 from app.models import TransactionDB
 from app.schemas import Transaction, TransactionCreate
@@ -37,18 +41,10 @@ def create_transaction(
     transaction: TransactionCreate,
     db: Session = Depends(get_db)
 ):
-    new_transaction = TransactionDB(
-        name=transaction.name,
-        amount=transaction.amount,
-        category=transaction.category,
-        transaction_date=transaction.transaction_date
+    return crud.create_transaction(
+        db=db,
+        transaction=transaction
     )
-
-    db.add(new_transaction)
-    db.commit()
-    db.refresh(new_transaction)
-
-    return new_transaction
 
 
 @app.get("/transactions", response_model=list[Transaction])
@@ -60,24 +56,14 @@ def get_transactions(
     end_date: date | None = None,
     db: Session = Depends(get_db)
 ):
-    query = db.query(TransactionDB)
-
-    if category is not None:
-        query = query.filter(TransactionDB.category.ilike(category))
-
-    if min_amount is not None:
-        query = query.filter(TransactionDB.amount >= min_amount)
-
-    if max_amount is not None:
-        query = query.filter(TransactionDB.amount <= max_amount)
-
-    if start_date is not None:
-        query = query.filter(TransactionDB.transaction_date >= start_date)
-
-    if end_date is not None:
-        query = query.filter(TransactionDB.transaction_date <= end_date)
-
-    return query.order_by(TransactionDB.id).all()
+    return crud.get_transactions(
+        db=db,
+        category=category,
+        min_amount=min_amount,
+        max_amount=max_amount,
+        start_date=start_date,
+        end_date=end_date
+    )
 
 
 @app.get("/transactions/{transaction_id}", response_model=Transaction)
@@ -85,10 +71,9 @@ def get_transaction(
     transaction_id: int,
     db: Session = Depends(get_db)
 ):
-    transaction = (
-        db.query(TransactionDB)
-        .filter(TransactionDB.id == transaction_id)
-        .first()
+    transaction = crud.get_transaction_by_id(
+        db=db,
+        transaction_id=transaction_id
     )
 
     if transaction is None:
@@ -106,10 +91,10 @@ def update_transaction(
     updated_transaction: TransactionCreate,
     db: Session = Depends(get_db)
 ):
-    transaction = (
-        db.query(TransactionDB)
-        .filter(TransactionDB.id == transaction_id)
-        .first()
+    transaction = crud.update_transaction(
+        db=db,
+        transaction_id=transaction_id,
+        updated_transaction=updated_transaction
     )
 
     if transaction is None:
@@ -117,27 +102,19 @@ def update_transaction(
             status_code=404,
             detail="Transaction not found"
         )
-
-    transaction.name = updated_transaction.name
-    transaction.amount = updated_transaction.amount
-    transaction.category = updated_transaction.category
-    transaction.transaction_date = updated_transaction.transaction_date
-
-    db.commit()
-    db.refresh(transaction)
 
     return transaction
 
 
 @app.delete("/transactions/{transaction_id}")
+@app.delete("/transactions/{transaction_id}")
 def delete_transaction(
     transaction_id: int,
     db: Session = Depends(get_db)
 ):
-    transaction = (
-        db.query(TransactionDB)
-        .filter(TransactionDB.id == transaction_id)
-        .first()
+    transaction = crud.delete_transaction(
+        db=db,
+        transaction_id=transaction_id
     )
 
     if transaction is None:
@@ -145,9 +122,6 @@ def delete_transaction(
             status_code=404,
             detail="Transaction not found"
         )
-
-    db.delete(transaction)
-    db.commit()
 
     return {
         "message": "Transaction deleted",

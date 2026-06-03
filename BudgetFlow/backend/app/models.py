@@ -1,3 +1,5 @@
+# SQL table definitions
+
 from sqlalchemy import Column, Date, Float, Integer, String
 
 from app.database import Base

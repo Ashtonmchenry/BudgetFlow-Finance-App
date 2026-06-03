@@ -1,3 +1,7 @@
+# Connects FastAPI to the SQLite database using SQLAlchemy.
+# Defines the database URL, creates an engine, and sets up a session factory.
+# Also defines a base class for models and a dependency function to get a database session for API endpoints.
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 

@@ -1,3 +1,5 @@
+# API request/response models (API data shapes)
+
 from datetime import date
 
 from pydantic import BaseModel

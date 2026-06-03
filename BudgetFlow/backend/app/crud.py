@@ -1,0 +1,106 @@
+# database create/read/update/delete logic
+
+from datetime import date
+
+from sqlalchemy.orm import Session
+
+from app.models import TransactionDB
+from app.schemas import TransactionCreate
+
+
+def create_transaction(
+    db: Session,
+    transaction: TransactionCreate
+):
+    """Handles the database insertion logic for creating a new transaction."""
+    new_transaction = TransactionDB(
+        name=transaction.name,
+        amount=transaction.amount,
+        category=transaction.category,
+        transaction_date=transaction.transaction_date
+    )
+
+    db.add(new_transaction)
+    db.commit()
+    db.refresh(new_transaction)
+
+    return new_transaction
+
+
+def get_transactions(
+    db: Session,
+    category: str | None = None,
+    min_amount: float | None = None,
+    max_amount: float | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None
+):
+    """Handles the filtered database query logic for retrieving transactions."""
+    query = db.query(TransactionDB)
+
+    if category is not None:
+        query = query.filter(TransactionDB.category.ilike(category))
+
+    if min_amount is not None:
+        query = query.filter(TransactionDB.amount >= min_amount)
+
+    if max_amount is not None:
+        query = query.filter(TransactionDB.amount <= max_amount)
+
+    if start_date is not None:
+        query = query.filter(TransactionDB.transaction_date >= start_date)
+
+    if end_date is not None:
+        query = query.filter(TransactionDB.transaction_date <= end_date)
+
+    return query.order_by(TransactionDB.id).all()
+
+
+def get_transaction_by_id(
+    db: Session,
+    transaction_id: int
+):
+    """Handles finding one transaction by its ID."""
+    return (
+        db.query(TransactionDB)
+        .filter(TransactionDB.id == transaction_id)
+        .first()
+    )
+
+
+def update_transaction(
+    db: Session,
+    transaction_id: int,
+    updated_transaction: TransactionCreate
+):
+    """Handles updating one row in the transactions table."""
+    transaction = get_transaction_by_id(db, transaction_id)
+
+    if transaction is None:
+        return None
+
+    transaction.name = updated_transaction.name
+    transaction.amount = updated_transaction.amount
+    transaction.category = updated_transaction.category
+    transaction.transaction_date = updated_transaction.transaction_date
+
+    db.commit()
+    db.refresh(transaction)
+
+    return transaction
+
+
+def delete_transaction(
+    db: Session,
+    transaction_id: int
+):
+    """Handles deleting one row from the transactions table."""
+    transaction = get_transaction_by_id(db, transaction_id)
+
+    if transaction is None:
+        return None
+
+    db.delete(transaction)
+    db.commit()
+
+    return transaction
