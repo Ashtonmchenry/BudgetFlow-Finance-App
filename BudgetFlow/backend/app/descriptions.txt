@@ -1,0 +1,26 @@
+main.py
+- Defines API endpoints
+- Handles request parameters
+- Calls crud.py and reports.py
+
+crud.py
+- Handles transaction database operations
+- Create, read, update, delete
+
+reports.py
+- Handles summary calculations
+- Handles monthly spending calculations
+
+schemas.py
+- Defines request/response shapes
+
+models.py
+- Defines database tables
+- reads/stores data from budgetflow.db
+
+database.py
+- Creates database connection/session
+- reads/stores data from budgetflow.db
+
+budgetflow.db
+- Stores database info

@@ -12,7 +12,7 @@ def create_transaction(
     db: Session,
     transaction: TransactionCreate
 ):
-    """Handles the database insertion logic for creating a new transaction."""
+    """Handles the database creation logic for creating a new transaction."""
     new_transaction = TransactionDB(
         name=transaction.name,
         amount=transaction.amount,
