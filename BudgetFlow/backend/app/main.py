@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.database import Base, engine
 from app.routers import reports, transactions
+from app import config
 
 
 app = FastAPI(
@@ -28,4 +29,15 @@ def root():
 def health_check():
     return {
         "status": "ok"
+    }
+
+@app.get("/config-check") # testing environment configuration (only returns bools, not actual values)
+def config_check():
+    return {
+        "database_configured": bool(config.DATABASE_URL),
+        "plaid_client_id_configured": bool(config.PLAID_CLIENT_ID),
+        "plaid_secret_configured": bool(config.PLAID_SECRET),
+        "plaid_env": config.PLAID_ENV,
+        "plaid_products": config.PLAID_PRODUCTS,
+        "plaid_country_codes": config.PLAID_COUNTRY_CODES
     }
