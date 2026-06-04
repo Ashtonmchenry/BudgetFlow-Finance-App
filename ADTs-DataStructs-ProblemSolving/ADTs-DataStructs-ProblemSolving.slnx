@@ -1,7 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="ADTs-DataStructs-ProblemSolving/ADTs-DataStructs-ProblemSolving.vcxproj" Id="4b66bf30-5b7d-42e5-936f-d583fd8bd305" />
-</Solution>
