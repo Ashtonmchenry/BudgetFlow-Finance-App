@@ -1,0 +1,13 @@
+FastAPI creates link_token
+        ↓
+React uses link_token to open Plaid Link
+        ↓
+User selects sandbox bank and logs in
+        ↓
+Plaid gives React a public_token
+        ↓
+React sends public_token to FastAPI
+        ↓
+FastAPI exchanges public_token for access_token
+        ↓
+access_token is used to sync transactions

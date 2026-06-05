@@ -69,6 +69,9 @@ def exchange_public_token(request_body: PublicTokenExchangeRequest):
             detail=str(error)
         )
 
+# Temporary backend endpoint for testing Plaid integration with the frontend.
+# This will ask Plaid Sandbox to create a fake public_token.
+# Then we can pass that fake public token into POST /plaid/exchange-public-token
 @router.post("/create-sandbox-public-token")
 def create_sandbox_public_token():
     try:
