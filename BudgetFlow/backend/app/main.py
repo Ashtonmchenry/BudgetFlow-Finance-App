@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from app.database import Base, engine
-from app.routers import reports, transactions
 from app import config
+from app.database import Base, engine
+from app.routers import plaid, reports, transactions
 
 
 app = FastAPI(
@@ -15,6 +15,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(transactions.router)
 app.include_router(reports.router)
+app.include_router(plaid.router)
 
 
 @app.get("/")
@@ -31,7 +32,8 @@ def health_check():
         "status": "ok"
     }
 
-@app.get("/config-check") # testing environment configuration (only returns bools, not actual values)
+
+@app.get("/config-check")
 def config_check():
     return {
         "database_configured": bool(config.DATABASE_URL),
