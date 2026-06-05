@@ -17,3 +17,7 @@ class Transaction(TransactionCreate):
 
     class Config:
         from_attributes = True
+
+
+class PublicTokenExchangeRequest(BaseModel):  # plaid schema
+    public_token: str
