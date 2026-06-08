@@ -4,9 +4,8 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from app.models import TransactionDB
+from app.models import PlaidItemDB, TransactionDB
 from app.schemas import TransactionCreate
-
 
 def create_transaction(
     db: Session,
@@ -104,3 +103,20 @@ def delete_transaction(
     db.commit()
 
     return transaction
+
+def create_plaid_item(
+    db: Session,
+    item_id: str,
+    access_token: str
+):
+    """Saves the Plaid access token in the SQLite database."""
+    plaid_item = PlaidItemDB(
+        item_id=item_id,
+        access_token=access_token
+    )
+
+    db.add(plaid_item)
+    db.commit()
+    db.refresh(plaid_item)
+
+    return plaid_item

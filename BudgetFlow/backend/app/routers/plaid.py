@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+
 from plaid.model.country_code import CountryCode
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
@@ -6,9 +7,12 @@ from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUse
 from plaid.model.products import Products
 from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
 
-from app import config
+from app import config, crud
 from app.plaid_client import client
 from app.schemas import PublicTokenExchangeRequest
+from app.database import get_db
+
+from sqlalchemy.orm import Session
 
 
 router = APIRouter(
@@ -48,9 +52,12 @@ def create_link_token():
             detail=str(error)
         )
 
-
+# endpoint no longer exposes the access token in the response, but it still saves the access token in the database for testing
 @router.post("/exchange-public-token")
-def exchange_public_token(request_body: PublicTokenExchangeRequest):
+def exchange_public_token(
+    request_body: PublicTokenExchangeRequest,
+    db: Session = Depends(get_db)
+):
     try:
         exchange_request = ItemPublicTokenExchangeRequest(
             public_token=request_body.public_token
@@ -58,9 +65,18 @@ def exchange_public_token(request_body: PublicTokenExchangeRequest):
 
         response = client.item_public_token_exchange(exchange_request)
 
+        access_token = response["access_token"]
+        item_id = response["item_id"]
+
+        crud.create_plaid_item(
+            db=db,
+            item_id=item_id,
+            access_token=access_token
+        )
+
         return {
-            "access_token": response["access_token"],
-            "item_id": response["item_id"]
+            "message": "Plaid item connected successfully",
+            "item_id": item_id
         }
 
     except Exception as error:
@@ -69,9 +85,9 @@ def exchange_public_token(request_body: PublicTokenExchangeRequest):
             detail=str(error)
         )
 
-# Temporary backend endpoint for testing Plaid integration with the frontend.
-# This will ask Plaid Sandbox to create a fake public_token.
-# Then we can pass that fake public token into POST /plaid/exchange-public-token
+# Temporary backend endpoint for testing Plaid integration without a frontend.
+# This asks Plaid Sandbox to create a fake public_token.
+# Then we can pass that public_token into POST /plaid/exchange-public-token.
 @router.post("/create-sandbox-public-token")
 def create_sandbox_public_token():
     try:
