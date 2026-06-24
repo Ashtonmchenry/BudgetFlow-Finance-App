@@ -120,3 +120,49 @@ def create_plaid_item(
     db.refresh(plaid_item)
 
     return plaid_item
+
+def get_first_plaid_item(db: Session):
+    return db.query(PlaidItemDB).first()
+
+
+def update_plaid_item_cursor(
+    db: Session,
+    plaid_item: PlaidItemDB,
+    cursor: str
+):
+    plaid_item.cursor = cursor
+    db.commit()
+    db.refresh(plaid_item)
+
+    return plaid_item
+
+def create_transaction_from_plaid(
+    db: Session,
+    plaid_transaction_id: str,
+    name: str,
+    amount: float,
+    category: str,
+    transaction_date
+):
+    existing_transaction = (
+        db.query(TransactionDB)
+        .filter(TransactionDB.plaid_transaction_id == plaid_transaction_id)
+        .first()
+    )
+
+    if existing_transaction is not None:
+        return existing_transaction
+
+    new_transaction = TransactionDB(
+        plaid_transaction_id=plaid_transaction_id,
+        name=name,
+        amount=amount,
+        category=category,
+        transaction_date=transaction_date
+    )
+
+    db.add(new_transaction)
+    db.commit()
+    db.refresh(new_transaction)
+
+    return new_transaction

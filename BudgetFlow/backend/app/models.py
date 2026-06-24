@@ -9,6 +9,7 @@ class TransactionDB(Base):
     __tablename__ = "transactions"
 
     id = Column(Integer, primary_key=True, index=True)
+    plaid_transaction_id = Column(String, nullable=True, unique=True, index=True)
     name = Column(String, nullable=False)
     amount = Column(Float, nullable=False)
     category = Column(String, nullable=False)
@@ -20,3 +21,4 @@ class PlaidItemDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     item_id = Column(String, nullable=False, unique=True, index=True)
     access_token = Column(String, nullable=False)
+    cursor = Column(String, nullable=True) # cursor lets us remember where the last Plaid sync stopped

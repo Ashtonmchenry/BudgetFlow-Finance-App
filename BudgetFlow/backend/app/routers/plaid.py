@@ -6,6 +6,7 @@ from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 from plaid.model.products import Products
 from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
+from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
 from app import config, crud
 from app.plaid_client import client
@@ -100,6 +101,100 @@ def create_sandbox_public_token():
 
         return {
             "public_token": response["public_token"]
+        }
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail=str(error)
+        )
+    
+@router.post("/sync-transactions")
+def sync_transactions(db: Session = Depends(get_db)):
+    plaid_item = crud.get_first_plaid_item(db)
+
+    if plaid_item is None:
+        raise HTTPException(
+            status_code=404,
+            detail="No Plaid item found. Exchange a public token first."
+        )
+
+    added_count = 0
+    modified_count = 0
+    removed_count = 0
+
+    cursor = plaid_item.cursor
+    has_more = True
+    latest_cursor = cursor
+
+    try:
+        while has_more:
+            if cursor is None: # the first sync, should not send a cursor at all
+                request = TransactionsSyncRequest(
+                access_token=plaid_item.access_token
+            )
+            else:
+                request = TransactionsSyncRequest(
+                    access_token=plaid_item.access_token,
+                    cursor=cursor
+                )
+
+            response = client.transactions_sync(request)
+
+            added_transactions = response["added"]
+            modified_transactions = response["modified"]
+            removed_transactions = response["removed"]
+
+            for plaid_transaction in added_transactions:
+                transaction_data = plaid_transaction.to_dict()
+
+                transaction_id = transaction_data["transaction_id"]
+                name = transaction_data["name"]
+                amount = transaction_data["amount"]
+                transaction_date = transaction_data["date"]
+
+                personal_finance_category = transaction_data.get(
+                    "personal_finance_category"
+                )
+
+                if personal_finance_category is not None:
+                    category = personal_finance_category.get(
+                        "primary",
+                        "Uncategorized"
+                    )
+                else:
+                    category = "Uncategorized"
+
+                crud.create_transaction_from_plaid(
+                    db=db,
+                    plaid_transaction_id=transaction_id,
+                    name=name,
+                    amount=amount,
+                    category=category,
+                    transaction_date=transaction_date
+                )
+
+                added_count += 1
+
+            modified_count += len(modified_transactions)
+            removed_count += len(removed_transactions)
+
+            latest_cursor = response["next_cursor"]
+            cursor = latest_cursor
+            has_more = response["has_more"]
+
+        crud.update_plaid_item_cursor(
+            db=db,
+            plaid_item=plaid_item,
+            cursor=latest_cursor
+        )
+
+        return {
+            "message": "Transactions synced successfully",
+            "added": added_count,
+            "modified": modified_count,
+            "removed": removed_count,
+            "cursor_saved": bool(latest_cursor)
         }
 
     except Exception as error:
