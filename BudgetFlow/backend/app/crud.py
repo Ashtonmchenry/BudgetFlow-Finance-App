@@ -25,7 +25,6 @@ def create_transaction(
 
     return new_transaction
 
-
 def get_transactions(
     db: Session,
     category: str | None = None,
@@ -54,7 +53,6 @@ def get_transactions(
 
     return query.order_by(TransactionDB.id).all()
 
-
 def get_transaction_by_id(
     db: Session,
     transaction_id: int
@@ -65,7 +63,6 @@ def get_transaction_by_id(
         .filter(TransactionDB.id == transaction_id)
         .first()
     )
-
 
 def update_transaction(
     db: Session,
@@ -87,7 +84,6 @@ def update_transaction(
     db.refresh(transaction)
 
     return transaction
-
 
 def delete_transaction(
     db: Session,
@@ -123,7 +119,6 @@ def create_plaid_item(
 
 def get_first_plaid_item(db: Session):
     return db.query(PlaidItemDB).first()
-
 
 def update_plaid_item_cursor(
     db: Session,

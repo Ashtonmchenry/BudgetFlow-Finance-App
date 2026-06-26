@@ -11,8 +11,9 @@ class TransactionCreate(BaseModel):
     category: str
     transaction_date: date
 
-
-class Transaction(TransactionCreate):
+# Does not include plaid_transaction_id which is fine.
+# That column is for avoiding duplicates and not needed in the API response
+class Transaction(TransactionCreate): 
     id: int
 
     class Config:
