@@ -1,3 +1,6 @@
+# Read .env
+# Expose config values to the rest of the app
+
 import os
 
 from dotenv import load_dotenv

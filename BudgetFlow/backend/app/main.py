@@ -11,6 +11,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
+# This looks at all classes that inherit from 'Base' and creates their tables if they do not exist.
 Base.metadata.create_all(bind=engine)
 
 app.include_router(transactions.router)
